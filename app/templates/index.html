@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Key-Value Assignment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        form {
+            margin-bottom: 2em;
+        }
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1em;
+        }
+        .input-group label {
+            margin-right: 1em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Key-Value Assignment</h1>
+
+    <h2>Set Key-Value Pair</h2>
+    <form id="set-form">
+        <div class="input-group">
+            <label for="set-key">Key:</label>
+            <input type="text" id="set-key" name="set-key">
+        </div>
+        <div class="input-group">
+            <label for="set-value">Value:</label>
+            <input type="text" id="set-value" name="set-value">
+        </div>
+        <button type="submit">Set</button>
+    </form>
+
+    <h2>Get Value by Key</h2>
+    <form id="get-form">
+        <div class="input-group">
+            <label for="get-key">Key:</label>
+            <input type="text" id="get-key" name="get-key">
+        </div>
+        <button type="submit">Get</button>
+    </form>
+
+    <h3>Result:</h3>
+    <pre id="result"></pre>
+
+    <script>
+        const API_BASE_URL = '';
+
+        document.getElementById('set-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const key = document.getElementById('set-key').value;
+            const value = document.getElementById('set-value').value;
+
+            const response = await fetch(`${API_BASE_URL}/set`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ key, value })
+            });
+
+            const data = await response.json();
+            document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+        });
+
+        document.getElementById('get-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const key = document.getElementById('get-key').value;
+            setTimeout(async () => {
+            const response = await fetch(`${API_BASE_URL}/get/${key}`);
+            const data = await response.json();
+            document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+        }, 2000); //2s delay
+    });
+    </script>
+</body>
+</html>
